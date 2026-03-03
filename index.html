@@ -1076,9 +1076,11 @@
   function extractVideoId(url) {
     if (!url) return null;
     url = url.trim();
+    // Strip tracking params like ?si= before matching
+    url = url.replace(/[?&]si=[^&]*/g, '');
     const patterns = [
       /(?:youtube\.com\/watch\?(?:.*&)?v=)([a-zA-Z0-9_-]{11})/,
-      /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})/,
+      /(?:youtu\.be\/)([a-zA-Z0-9_-]{11})(?:[?&]|$)/,
       /(?:youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/,
       /(?:youtube\.com\/v\/)([a-zA-Z0-9_-]{11})/,
       /(?:youtube\.com\/shorts\/)([a-zA-Z0-9_-]{11})/,
@@ -1359,7 +1361,8 @@
 
   function onPlayerError(event) {
     document.getElementById('modal-loading').classList.add('hide');
-    showToast('Could not load video. Check if it's a valid 360° YouTube link.', 'error');
+    // ✅ FIXED — outer quotes changed to double quotes
+showToast("Could not load video. Check if it's a valid 360° YouTube link.", "error");
   }
 
   // ─── CLOSE MODAL ───
